@@ -1,95 +1,49 @@
-# Assignment: Database-Integrated REST API
+# DBE Integrations
 
-## Introduction
+This is my product inventory API for WD2200. I can add, view, update, and delete products. It uses Express and TypeScript, PostgreSQL to save the products, Prisma to work with the database, and Redis to cache the GET requests. Zod checks the data before it gets saved.
 
-In this assignment, we will build a **REST API** using **Express.js**, **Prisma** (ORM), **PostgreSQL**, and **Redis** for caching. The app integrates **Zod** for validation and includes comprehensive error handling, ensuring robustness and maintainability. By the end, you’ll have a functional backend service that demonstrates CRUD operations, database integration, caching mechanisms, and modular project structure in a real-world scenario.
+## Run it locally
 
----
+You need Node.js 20 or newer and Docker Desktop running. From this project folder:
 
-## **Working with Dev Container**
+```powershell
+docker compose up -d --wait
+cd code\start
+npm ci
+Copy-Item .env.example .env
+npm run db:generate
+npm run db:migrate
+npm run dev
+```
 
-To complete this assignment in a reliable and fully configured environment, please refer to the instructions in the file: **`README-devcontainer.md`**. This guide walks you through opening the assignment in **Visual Studio Code** using a **Dev Container**, which automatically installs all necessary Python libraries and tools. Following that setup ensures that the notebook runs smoothly without manual configuration or missing dependencies. Make sure to open the **main assignment folder** in VS Code and follow the steps outlined in the Dev Container guide before starting the notebook.
+The API runs at **http://localhost:3002**. Leave that terminal open. The example settings are for the local Docker setup. Keep your `.env` file out of GitHub.
 
----
+## Test it in Bruno
 
-## Starter Files
+Open `Product API.code-workspace` in VS Code. Trust the workspace if VS Code asks, then click the Bruno sidebar icon. Open the collection folder `bruno\Product API` if it does not show up automatically, and select **Local**.
 
-The initial code is available inside the `start` folder under the `code` folder associated with this activity. However, it's recommended to start the project from scratch.
+Run the 15 requests in number order. **Create product** saves the product ID for the other requests. Run each cache pair within 60 seconds: the response header `X-Cache: MISS` means it read from PostgreSQL, and `X-Cache: HIT` means it used Redis. Adding, updating, or deleting a product clears the affected cache so the next read gets fresh data.
 
----
+| Method | Path | What it does |
+| --- | --- | --- |
+| GET | `/api/products` | List products |
+| GET | `/api/products/:id` | Get one product |
+| POST | `/api/products` | Add a product |
+| PUT | `/api/products/:id` | Update one or more fields |
+| DELETE | `/api/products/:id` | Delete a product |
 
-## Requirements
+For a POST, use JSON like this:
 
-We'll be working with Express.js, Prisma, PostgreSQL, and Redis to develop our Product Inventory API. Here's what we need to accomplish:
+```json
+{ "name": "Demo Keyboard", "price": 49.99, "stock": 10, "category": "Electronics" }
+```
 
-### Set Up the Development Environment
+The name cannot be blank, price cannot be negative, and stock must be a whole number of zero or more. Category is optional. Prisma returns the decimal price as a string, like `"49.99"`. A bad request gets `400`, a missing product gets `404`, and a successful delete gets `204` with no body.
 
-We need to:  
+## A few other commands
 
-- Initialize a Node.js project using `npm` with TypeScript support.
-- Install necessary dependencies, including Express.js for routing, Prisma for ORM, Redis for caching, and Zod for validation.
-- Configure scripts for development and production environments.
+From `code\start`, run `npm test` while the API is running to check CRUD, caching, validation, and error responses. Run `npm run build` and then `npm start` to use the compiled app.
 
-### Build the Core Features
+From the project folder, `docker compose stop` stops the database and Redis. Products stay saved in the PostgreSQL volume.
 
-We need to implement the following functionalities:  
-
-1. **Database Integration:**  
-   
-   - Use Prisma to define a `Product` model and connect it to a PostgreSQL database.
-   - Handle database migrations and schema updates with Prisma.
-
-2. **CRUD Operations:**  
-   
-   - Implement endpoints for creating, reading, updating, and deleting products.
-   - Use Prisma's type-safe queries for database interactions.
-
-3. **Caching with Redis:**  
-   
-   - Cache responses for read-heavy endpoints to optimize performance.
-   - Invalidate cache when data changes (e.g., after create, update, or delete operations).
-
-4. **Modular Project Structure:**  
-   
-   - Organize the project into controllers, routes, utils, and validations.
-   - Use TypeScript to enforce type checks across the application.
-
-5. **Validation and Error Handling:**  
-   
-   - Validate incoming requests using Zod schemas.
-   - Handle errors gracefully with centralized error handling middleware.
-
-6. **Middleware and Logging:**  
-   
-   - Use `cors` for cross-origin resource sharing.
-   - Use `morgan` for logging HTTP requests.
-
-### Test the Application
-
-We need to verify:  
-
-- The API correctly performs CRUD operations on the `Product` resource.
-- Redis caching optimizes response times for read-heavy endpoints.
-- Validation ensures only valid data is processed.
-- Errors are handled gracefully with meaningful responses.
-- All tests pass successfully using tools like Postman or cURL.
-
----
-
-## Deliverables
-
-The deliverable of this assignment is a working backend service that meets all the requirements above. We need to submit:  
-
-- The public GitHub repository containing the source code.
-- Screenshots showing:
-  - The API running locally.
-  - Responses from API endpoints.
-  - Redis caching in action.
-- A brief README file explaining how to set up and run the app locally.
-- Simple documentation for the app's functionality and testing process.
-
----
-
-## Conclusion
-
-Building a **Product Inventory API with Caching** using Express.js, Prisma, PostgreSQL, and Redis is an excellent way to practice creating scalable backend services. By completing this activity, you've learned how to integrate a database, implement CRUD operations, optimize performance with caching, and structure a modular backend project. These skills form the foundation for developing more complex and efficient APIs in the future.
+My [video walkthrough](docs/VIDEO-WALKTHROUGH.md) explains the files and the Bruno demo. There are also [screenshots](docs/screenshots/README.md) and [test results](docs/TESTING.md). The [original assignment](docs/ASSIGNMENT.md) is saved separately. The [Dev Container guide](README-devcontainer.md) is there if you want that setup instead.

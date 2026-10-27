@@ -1,0 +1,15 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/typescript-node:20
+    command: sleep infinity
+    volumes:
+      - .:/workspaces/dbe
+    environment:
+      DATABASE_URL: postgresql://dbe:dbe_local@postgres:5432/products?schema=public
+      REDIS_URL: redis://redis:6379
+      PORT: "3002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy

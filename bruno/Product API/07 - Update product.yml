@@ -1,0 +1,35 @@
+info:
+  name: Update product
+  type: http
+  seq: 7
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/api/products/:id"
+  params:
+    - name: id
+      value: "{{productId}}"
+      type: path
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "price": 39.99,
+        "stock": 8
+      }
+  auth: null
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Update product", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().price).to.equal('39.99');
+        });
+
+settings:
+  encodeUrl: true

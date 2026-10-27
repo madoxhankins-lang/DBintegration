@@ -1,0 +1,4 @@
+{
+  "folders": [{ "name": "DBE Integrations", "path": "." }],
+  "extensions": { "recommendations": ["bruno-api-client.bruno"] }
+}

@@ -1,0 +1,34 @@
+info:
+  name: Update deleted product
+  type: http
+  seq: 14
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/api/products/:id"
+  params:
+    - name: id
+      value: "{{productId}}"
+      type: path
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "stock": 1
+      }
+  auth: null
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Update deleted product", function () {
+          expect(res.getStatus()).to.equal(404);
+          expect(res.getBody().error).to.equal('Product not found.');
+        });
+
+settings:
+  encodeUrl: true

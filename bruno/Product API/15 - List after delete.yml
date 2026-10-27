@@ -1,0 +1,22 @@
+info:
+  name: List after delete
+  type: http
+  seq: 15
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/products"
+  auth: null
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("List after delete", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getHeader('x-cache')).to.equal('MISS');
+          expect(res.getBody().some(p => p.id === Number(bru.getCollectionVar('productId')))).to.equal(false);
+        });
+
+settings:
+  encodeUrl: true

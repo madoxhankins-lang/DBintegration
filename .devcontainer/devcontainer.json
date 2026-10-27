@@ -1,22 +1,13 @@
 {
-  "name": "assignment-database-integrated-rest-api",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
-    }
-  },
-    "postCreateCommand": "npm install && npx prisma generate",
-  "forwardPorts": [3000],
+  "name": "DBE Integrations",
+  "dockerComposeFile": ["../docker-compose.yml", "docker-compose.dev.yml"],
+  "service": "app",
+  "workspaceFolder": "/workspaces/dbe",
+  "postCreateCommand": "cd code/start && npm ci && npm run db:generate && npm run db:migrate",
+  "forwardPorts": [3002],
   "customizations": {
     "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "ms-vscode.vscode-typescript-next"
-
-      ]
+      "extensions": ["bruno-api-client.bruno", "dbaeumer.vscode-eslint"]
     }
   }
-
 }

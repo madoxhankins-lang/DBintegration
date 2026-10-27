@@ -1,0 +1,25 @@
+info:
+  name: Get product from database
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/products/:id"
+  params:
+    - name: id
+      value: "{{productId}}"
+      type: path
+  auth: null
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Get product from database", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getHeader('x-cache')).to.equal('MISS');
+        });
+
+settings:
+  encodeUrl: true

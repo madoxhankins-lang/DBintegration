@@ -1,0 +1,38 @@
+info:
+  name: Create product
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/products"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Demo Keyboard",
+        "price": 49.99,
+        "stock": 10,
+        "category": "Electronics"
+      }
+  auth: null
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.getStatus() === 201) {
+          bru.setCollectionVar("productId", String(res.getBody().id));
+        }
+    - type: tests
+      code: |-
+        test("Create product", function () {
+          expect(res.getStatus()).to.equal(201);
+          expect(res.getBody().name).to.equal('Demo Keyboard');
+        });
+
+settings:
+  encodeUrl: true

@@ -1,0 +1,32 @@
+info:
+  name: Invalid product
+  type: http
+  seq: 10
+
+http:
+  method: POST
+  url: "{{baseUrl}}/api/products"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name": "",
+        "price": -10,
+        "stock": -1
+      }
+  auth: null
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Invalid product", function () {
+          expect(res.getStatus()).to.equal(400);
+          expect(res.getBody().error).to.equal('Invalid request data.');
+        });
+
+settings:
+  encodeUrl: true

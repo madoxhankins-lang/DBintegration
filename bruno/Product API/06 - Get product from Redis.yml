@@ -1,0 +1,25 @@
+info:
+  name: Get product from Redis
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: "{{baseUrl}}/api/products/:id"
+  params:
+    - name: id
+      value: "{{productId}}"
+      type: path
+  auth: null
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Get product from Redis", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getHeader('x-cache')).to.equal('HIT');
+        });
+
+settings:
+  encodeUrl: true
