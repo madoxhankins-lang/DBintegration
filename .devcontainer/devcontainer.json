@@ -1,0 +1,22 @@
+{
+  "name": "assignment-database-integrated-rest-api",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+    "postCreateCommand": "npm install && npx prisma generate",
+  "forwardPorts": [3000],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next"
+
+      ]
+    }
+  }
+
+}
