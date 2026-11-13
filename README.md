@@ -1,12 +1,14 @@
-# DBE Integrations
+# Product Inventory API with PostgreSQL and Redis
 
 This is my product inventory API for WD2200. I can add, view, update, and delete products. It uses Express and TypeScript, PostgreSQL to save the products, Prisma to work with the database, and Redis to cache the GET requests. Zod checks the data before it gets saved.
 
-## Run it locally
+## Installation
 
-You need Node.js 20 or newer and Docker Desktop running. From this project folder:
+You need Node.js 20 or newer and Docker Desktop running. Clone the repository, then run:
 
 ```powershell
+git clone https://github.com/madoxhankins-lang/DBintegration.git
+cd DBintegration
 docker compose up -d --wait
 cd code\start
 npm ci
@@ -18,7 +20,7 @@ npm run dev
 
 The API runs at **http://localhost:3002**. Leave that terminal open. The example settings are for the local Docker setup. Keep your `.env` file out of GitHub.
 
-## Test it in Bruno
+## Usage with Bruno
 
 Open `Product API.code-workspace` in VS Code. Trust the workspace if VS Code asks, then click the Bruno sidebar icon. Open the collection folder `bruno\Product API` if it does not show up automatically, and select **Local**.
 
@@ -47,3 +49,7 @@ From `code\start`, run `npm test` while the API is running to check CRUD, cachin
 From the project folder, `docker compose stop` stops the database and Redis. Products stay saved in the PostgreSQL volume.
 
 My [video walkthrough](docs/VIDEO-WALKTHROUGH.md) explains the files and the Bruno demo. There are also [screenshots](docs/screenshots/README.md) and [test results](docs/TESTING.md). The [original assignment](docs/ASSIGNMENT.md) is saved separately. The [Dev Container guide](README-devcontainer.md) is there if you want that setup instead.
+
+## Author
+
+[Madox Hankins](https://github.com/madoxhankins-lang)
